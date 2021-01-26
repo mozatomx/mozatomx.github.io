@@ -20,10 +20,15 @@
 .eje {
   font-family: 'Roboto Condensed';
   font-size: 12px;
+  
 }
 
 .titulo-grafica {
   font-family: 'Montserrat';
   font-weight: bold;
   font-size: 20px;
+}
+
+.encabezadoVisualizacion{
+  background-color: #00b140;
 }
