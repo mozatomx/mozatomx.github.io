@@ -139,7 +139,7 @@ slider     = d3.select('#slider')
 // Cierre
 
 
-d3.csv('acreditadosV07.csv').then((data) => {
+d3.csv('AcreditadosV07.csv').then((data) => {
   data.forEach((d) => {
     d.Acreditados = +d.Acreditados
     d.Morosos = +d.Morosos
