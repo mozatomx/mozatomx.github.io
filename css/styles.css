@@ -19,8 +19,7 @@
 
 .eje {
   font-family: 'Roboto Condensed';
-  font-size: 12px;
-  
+  font-size: 14px;
 }
 
 .titulo-grafica {
@@ -31,4 +30,14 @@
 
 .encabezadoVisualizacion{
   background-color: #00b140;
+}
+
+
+.ejes line {
+  stroke: #bbbbbb;
+  stroke-width: 1px;
+}
+
+.slider {
+  width: 100%;
 }

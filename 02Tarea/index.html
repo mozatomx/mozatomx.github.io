@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moisés Zárate Totolhua - Gráficos con D3 (II)</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+    integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+
+  <nav class="d-flex jutify-content-between navbar navbar-light bg-light shadow">
+
+
+    <a href="/index.html">
+      <img src="https://www.unir.net/wp-content/uploads/2020/03/logo-horizontal-1536x925.png" class="logo">
+    </a>
+
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link" href="/index.html">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/pdfs/Trabajo01-visualizando-nuestro-primer-dataset.pdf" target="_blank">Tarea 01 </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " href="/01Tarea/index.html">Tarea 02</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="/02Tarea/index.html">Tarea 03</a>
+      </li>
+    </ul>
+
+    Herramientas de Visualización <br>
+    Moisés Zárate Totolhua <br>
+    Gráficos con D3 (II)
+
+  </nav>
+
+  <div class="container-fluid mt-4">
+
+    <div class="row encabezadoVisualizacion mb-4 ml-4 mr-4">
+      <div class="col-md-12" style="color:#FFF">
+        <img src="https://www.invi.cdmx.gob.mx/themes/base/assets/images/logos/Logo_CDMX.png" class="img-responsive">
+        INSTITUTO DE VIVIENDA DE LA CIUDAD DE MÉXICO
+
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-md-12 ml-4 mr-4">
+        <h4>Evolución de la morosidad</h4>
+        <p>
+          Datos de Diciembre de 2006 a noviembre de 2020
+        </p>
+      </div>
+    </div>
+
+
+
+    <div class="row mb-4 ml-4 mr-4">
+
+      <!-- botones -->
+      <div class="col-md-3">
+        Controles:<br>
+        <button class="btn btn-success" onclick="delta(-5)">
+          <i class="fas fa-arrow-circle-left"></i>
+        </button>
+        <button class="btn btn-success" onclick="delta(-1)">
+          <i class="fas fa-arrow-circle-left"></i>
+        </button>
+        <button class="btn btn-info" id="pausa">
+          <i class="fas fa-pause-circle"></i>
+        </button>
+        <button class="btn btn-success" onclick="delta(1)">
+          <i class="fas fa-arrow-circle-right"></i>
+        </button>
+        <button class="btn btn-success" onclick="delta(5)">
+          <i class="fas fa-arrow-circle-right"></i>
+        </button>
+      </div>
+      <!-- /botones -->
+
+      <!-- slider -->
+      <div class="col-md-6">
+        Desplace el control para elegir un mes de corte:
+        <input type="range" min="0" max="100" value="0" class="slider" id="slider">
+        <br><span class="badge badge-info p-2" id="sliderv"></span>
+      </div>
+      <!-- /slider -->
+
+      <!-- Tipo de cartera  -->
+      <div class="col-md-3">
+        Seleccione un tipo de cartera:
+        <select id="TipoCartera" class="form-control"></select>
+      </div>
+      <!-- /Tipo de cartera -->
+
+    </div>
+
+    <div class="row mb-4 ml-4 mr-4">
+      <div class="col-md-12">
+        <div id="graf" class="vizprev"></div>
+      </div>
+    </div>
+
+    <div class="row mb-4 ml-4 mr-4">
+      <div class="col-md-12">
+        <h3>
+          Tarea 02. Gráficos con D3 (I)
+          </h4>
+          <p>
+            El dataset que se utiliza para la visualización comprende un conjunto de 4209 registros de la situación de
+            las carteras crediticias
+            por cada mes desde diciembre de 2006 hasta octubre de 2020.
+          </p>
+          <p>
+            El conjunto de datos utilizado cuenta con la siguiente información:
+            <br>
+            <img src="/img/Tarea02_img02.png" alt="Ejemplo del conjunto de datos." class="img-responsive" />
+
+          <ul>
+            <li>
+              Cierre, identifica la situación de la cartera a un corte, os 4 primeros dígitos representan el año y los
+              últimos dos el mes,
+              ejemplo 200612 representa el corte de diciembre de 2006.
+            </li>
+            <li>
+              27 carteras crediticias identificadas por las columnas “Cartera” (de forma numérica) y “Línea” (de
+              manera descriptiva)
+            </li>
+            <li>
+              Una agrupación de tipo de cartera, ya que algunos créditos se han otorgado únicamente para compra de
+              suelo o estudios y proyectos, para otros casos se ha otorgado crédito para edificación o compra de
+              cartera.
+            </li>
+            <li>
+              Acreditados que representa el total de acreditados vigentes
+            </li>
+            <li>
+              Morosos que indica la cantidad de acreditados que tienen morosidad, entendiéndose la morosidad, como
+              aquellos acreditados que adeudan 4 o más meses de su crédito.
+            </li>
+            <li>
+              MontoMorosos, es un valor en pesos calculado al valor del año identificado en la columna de cierre, la
+              información en la base de datos esta almacenada en veces salarios mínimos.
+            </li>
+            <li>
+              Saldo, representa el saldo deudor de todos los créditos sin importar si son morosos o no.
+            </li>
+          </ul>
+
+          </p>
+
+          <p>
+            La visualización realizada, tiene el objetivo de realizar un análisis descriptivo de los datos
+            correspondientes a
+            la situación de la cartera crediticia en cada uno de los meses desde diciembre de 2006 hasta octubre de
+            2020.
+          </p>
+
+          <p>
+            Cuenta en primera instancia con dos filtros principales, Cierre que indica el corte que se desea visualizar
+            y
+            Tipo de cartera (todas en un principio).
+            Posteriormente tiene una lista desplegable que indica la métrica o unidad en que se visualizan los datos que
+            pueden ser Total de Acreditados, Créditos Morosos o Monto de morosidad
+            Finalmente, un botón que permite ordenar los datos de manera ascendente o descendente y cuya leyenda cambia
+            conforme se da clic.
+
+          </p>
+
+          <p>
+            Dentro de la visualización, se presenta un título y tres etiquetas
+          <ul>
+            <li>
+              Cierre que indica el corte de mes y año de los datos que se está mostrando
+            </li>
+            <li>
+              Tasa de morosidad que es un indicador calculado al dividir el número de créditos morosos entre el número
+              de
+              créditos vigentes
+            </li>
+            <li>
+              Monto de adeudos que representa el valor en pesos de lo que se debía en su momento por aquellas personas
+              que
+              se
+              identifican como “morosos”, dado que adeudan cuatro o más meses de su crédito.
+            </li>
+          </ul>
+          </p>
+
+          <p>
+            Las barras mostradas representan cada una de las carteras crediticias, los colores identifican alguno de los
+            once tipos de cartera
+            seleccionables en la lista desplegable. La paleta de colores, se basa en los colores utilizados para Ciudad
+            Sustentable y Ciudad Social,
+            definidos en el Manual de Identidad Institucional del Gobierno de la Ciudad de México 2018 – 2024,
+            mismo que se publicó mediante acuerdo en la Gaceta oficial de la Ciudad de México el 21 de marzo de 2019.
+            <a href="https://data.consejeria.cdmx.gob.mx/portal_old/uploads/gacetas/fa597c60792082904cd6dbc497edcedb.pdf"
+              target="_blank">Gaceta Oficial CDMX. (2019)</a>
+          </p>
+
+      </div>
+    </div>
+
+
+  </div>
+
+  <script src="/js/d3.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+    crossorigin="anonymous"></script>
+
+  <script src="gapminderMorosidad.js"></script>
+
+  <script src="https://kit.fontawesome.com/f0abc9c17c.js" crossorigin="anonymous"></script>
+
+</body>
+
+</html>
