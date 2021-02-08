@@ -48,7 +48,7 @@ g = svg.append('g')
 fontsize = alto * 0.65
 yearDisplay = g.append('text')
                 .attr('x', ancho / 2)
-                .attr('y', alto / 2 + fontsize/2)
+                .attr('y', alto / 3 + fontsize/2)
                 .attr('text-anchor', 'middle')
                 .attr('font-family', 'Roboto')
                 .attr('font-size', `${fontsize}px`)
@@ -76,8 +76,8 @@ g.append('clipPath')
 titulo = g.append('text')
           .attr('x', `${ancho / 2}px`)
           .attr('y', '-15px')
-          .attr('text-anchor', 'middle')
-          .text('Créditos vs Tasa de Morosidad  Dic 2006 - Nov 2020')
+          .attr('text-anchor', 'middle')          
+          .text('Créditos mosoros vs Tasa de Morosidad  Dic 2006 - Nov 2020')
           .attr('class', 'titulo-grafica')
 
 tituloY = g.append('text')
@@ -114,6 +114,46 @@ color = d3.scaleOrdinal().range(['#00843d', '#fca800', '#f65545', '#ec95c5','#91
 datos = []
 years = []
 iyear = 0
+
+numeroAcreditados  = 0
+montoMorosidad  = 0
+numeroMorosos = 0
+
+    // Se define un tamaño de fuente para las 3 etiquetas que contendrá 
+    // la gráfica para identificar el Tasa de morosidad en
+    // Numero de acreditados  
+    // así como el monto de los adeudos
+
+    
+    // Se agrega el text para el Tasa de morosidad
+    TasaMorosidadDisplay = g.append('text')                
+                    .attr('x', -10 )                
+                    .attr('y', -10 )
+                    .attr('text-anchor', 'middle')
+                    .attr('font-family', 'Roboto')
+                    .attr('font-size', '24px')
+                    .attr('fill', '#cb2833')
+                    .text('%')
+
+    // Se agrega el text para la tasa de morosidad
+    AcreditadosDisplay = g.append('text')                
+                    .attr('x', 30 )                
+                    .attr('y', 30 )
+                    .attr('text-anchor', 'left')
+                    .attr('font-family', 'Roboto')
+                    .attr('font-size', '24px')
+                    .attr('fill', '#898d8d')
+                    .text('Acreditados: ')
+
+    // Se agrega el text para el monto de morosidad
+    MontoMorosidadDisplay = g.append('text')                
+                    .attr('x', 30 )                
+                    .attr('y', 60 )
+                    .attr('text-anchor', 'left')
+                    .attr('font-family', 'Roboto')
+                    .attr('font-size', '24px')
+                    .attr('fill', '#898d8d')
+                    .text('Morosidad : $ ')  
 
 
 TipoCartera = 'todos'
@@ -252,34 +292,45 @@ d3.csv('AcreditadosV07.csv').then((data) => {
   // agregamos un rectangulo para encerrar las leyendas
 
   g.append('rect')
-    .attr('x', 10)
-    .attr('y', 10 )
-    .attr('width', 250)
-    .attr('height', 450)
+    .attr('x', 550)
+    .attr('y', alto - 100 )
+    .attr('width', ancho - 600 )
+    .attr('height', 80)
     .attr('stroke', 'gray')
     .attr('fill', '#dedede')
-    .attr('fill-opacity', 0.75)      
+    .attr('fill-opacity', 0.75)   
 
     // con el dominino del color, lo usamos para llenar cada leyendas
-    // para cada una generamos un recuadro de 20x20 px 
-    // le colocamos el nombre del tipo de cartera 
+    // para cada una generamos un recuadro de 10x10 px 
+    // le colocamos el nombre del tipo de cartera a su derecha
     
+    posX = 570 
+    posY = alto - 80
+    posI = 0
 
   color.domain().forEach((d, i) => {
+
+    if (i>7){
+        posY = alto - 40
+        posX = 570 
+        posI = i - 8
+    }
+
     g.append('rect')
-      .attr('x', 20)
-      .attr('y', 20 + i*30)
+      .attr('x', posX  + posI * 160)
+      .attr('y', posY)
       .attr('width', 10)
       .attr('height', 10)
       .attr('fill', color(d))
 
     g.append('text')
-      .attr('x', 40 )
-      .attr('y', 30 + i*30)
+      .attr('x', posX + 20  + posI * 160)
+      .attr('y', posY + 10 )
       .attr('fill', 'black')
       .attr('font-size', `${fontsize}px`)
       .text(d)
       //.text(d[0].toUpperCase() + d.slice(1))
+      posI = posI + 1 
 
   })
  
@@ -315,6 +366,26 @@ function frame() {
   // para que sea congruente durante la animación
 
   slider.node().value = iyear
+
+   // Ya con los datos filtrados, utilizamos el dataframe para realizar los calculos de: 
+    // MontoAdeudos
+    // Numero de acreditados 
+    // Numero de acreditados morosos
+
+    numeroAcreditados = d3.sum(data, d => d.Acreditados)  
+    montoMorosidad = d3.sum(data, d => d.MontoMorosos)
+    numeroMorosos = d3.sum(data, d => d.Morosos)  
+
+    //  Agregamos los textos a las etiquetas dentro de la gráfica 
+    // En el caso de la tasa de morosidad, se calcula diviviendo los acreditados morosos entre el número de acreditados
+    // Se formatean en porcentaje y en monto de pesos correspondiente
+
+    AcreditadosDisplay.text('Acreditados: ' + d3.format(',d')(numeroAcreditados) )
+    TasaMorosidadDisplay.text(d3.format(".0%")(numeroMorosos/numeroAcreditados))
+    MontoMorosidadDisplay.text('Monto adeudos: ' + d3.format("$,.0f")(montoMorosidad))
+
+
+
 
   // Mandamos a pintar los circulos
 

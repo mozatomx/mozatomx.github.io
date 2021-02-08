@@ -64,8 +64,26 @@
 
     <div class="row mb-4 ml-4 mr-4">
 
+      <!-- Tipo de cartera  -->
+      <div class="col-md-2">
+        Seleccione un tipo de cartera:
+        <select id="TipoCartera" class="form-control"></select>
+      </div>
+      <!-- /Tipo de cartera -->
+
+
+      <!-- slider -->
+      <div class="col-md-8">
+        <br>
+        Desplace el control para elegir un mes de corte:
+        <br>
+        <input type="range" min="0" max="100" value="0" class="slider" id="slider">
+        <span class="badge badge-info p-2" id="sliderv"></span>
+      </div>
+      <!-- /slider -->
+
       <!-- botones -->
-      <div class="col-md-3">
+      <div class="col-md-2">
         Controles:<br>
         <button class="btn btn-success" onclick="delta(-5)">
           <i class="fas fa-arrow-circle-left"></i>
@@ -85,21 +103,6 @@
       </div>
       <!-- /botones -->
 
-      <!-- slider -->
-      <div class="col-md-6">
-        Desplace el control para elegir un mes de corte:
-        <input type="range" min="0" max="100" value="0" class="slider" id="slider">
-        <br><span class="badge badge-info p-2" id="sliderv"></span>
-      </div>
-      <!-- /slider -->
-
-      <!-- Tipo de cartera  -->
-      <div class="col-md-3">
-        Seleccione un tipo de cartera:
-        <select id="TipoCartera" class="form-control"></select>
-      </div>
-      <!-- /Tipo de cartera -->
-
     </div>
 
     <div class="row mb-4 ml-4 mr-4">
@@ -108,26 +111,31 @@
       </div>
     </div>
 
+
+    <div class="row mb-4 ml-4 mr-4">
+
+    </div>
+
     <div class="row mb-4 ml-4 mr-4">
       <div class="col-md-12">
         <h3>
-          Tarea 02. Gráficos con D3 (I)
+          Tarea 03. Gráficos con D3 (II)
           </h4>
           <p>
-            El dataset que se utiliza para la visualización comprende un conjunto de 4209 registros de la situación de
+            El dataset que se utiliza para la visualización comprende un conjunto de 4,359 registros de la situación de
             las carteras crediticias
-            por cada mes desde diciembre de 2006 hasta octubre de 2020.
+            por cada mes desde diciembre de 2006 hasta noviembre de 2020, como se muestra en la imagen 1.
           </p>
           <p>
             El conjunto de datos utilizado cuenta con la siguiente información:
             <br>
-            <img src="/img/Tarea02_img02.png" alt="Ejemplo del conjunto de datos." class="img-responsive" />
-
+            <img src="/img/tarea03img2.png" alt="Ejemplo del conjunto de datos." class="img-responsive" />
+            <br>
+            Imagen 1. Ejemplo de conjunto de datos.
           <ul>
             <li>
-              Cierre, identifica la situación de la cartera a un corte, os 4 primeros dígitos representan el año y los
-              últimos dos el mes,
-              ejemplo 200612 representa el corte de diciembre de 2006.
+              Cierre, identifica la situación de la cartera a un corte, los 4 primeros dígitos representan
+              el año y los últimos dos el mes, ejemplo 200612 representa el corte de diciembre de 2006.
             </li>
             <li>
               27 carteras crediticias identificadas por las columnas “Cartera” (de forma numérica) y “Línea” (de
@@ -146,6 +154,11 @@
               aquellos acreditados que adeudan 4 o más meses de su crédito.
             </li>
             <li>
+              TasaMorosos, que indica el porcentaje calculado con las columnas Morosos/Acreditados
+            </li>
+
+
+            <li>
               MontoMorosos, es un valor en pesos calculado al valor del año identificado en la columna de cierre, la
               información en la base de datos esta almacenada en veces salarios mínimos.
             </li>
@@ -157,50 +170,46 @@
           </p>
 
           <p>
-            La visualización realizada, tiene el objetivo de realizar un análisis descriptivo de los datos
-            correspondientes a
-            la situación de la cartera crediticia en cada uno de los meses desde diciembre de 2006 hasta octubre de
-            2020.
+            La visualización realizada, busca mostrar la evolución de la morosidad, identificar el conjunto de carteras que 
+            se convirtieron en las más morosas y aquellas donde su tasa de morosos es más alta desde diciembre de 2006 
+            hasta noviembre de 2020, para realizar. 
           </p>
 
           <p>
-            Cuenta en primera instancia con dos filtros principales, Cierre que indica el corte que se desea visualizar
-            y
-            Tipo de cartera (todas en un principio).
-            Posteriormente tiene una lista desplegable que indica la métrica o unidad en que se visualizan los datos que
-            pueden ser Total de Acreditados, Créditos Morosos o Monto de morosidad
-            Finalmente, un botón que permite ordenar los datos de manera ascendente o descendente y cuya leyenda cambia
-            conforme se da clic.
-
+            La construcción de la visualización cuenta con
           </p>
-
-          <p>
-            Dentro de la visualización, se presenta un título y tres etiquetas
           <ul>
             <li>
-              Cierre que indica el corte de mes y año de los datos que se está mostrando
+              1.	Filtro de los tipos de cartera en un control de lista desplegable
             </li>
             <li>
-              Tasa de morosidad que es un indicador calculado al dividir el número de créditos morosos entre el número
-              de
-              créditos vigentes
+              2.	Control de desplazamiento (slider) con el que es posible moverse hacia cualquier corte que se desee revisar
             </li>
             <li>
-              Monto de adeudos que representa el valor en pesos de lo que se debía en su momento por aquellas personas
-              que
-              se
-              identifican como “morosos”, dado que adeudan cuatro o más meses de su crédito.
+              3.	Un conjunto de controles para avanzar o retroceder en 5 unidades, 1 unidad de visualización o bien poner pausa o play para reinicializar la visualización
             </li>
           </ul>
+
+          <p>
+            La visualización desde el momento en que se carga se inicia la animación recorriendo mes con mes desde diciembre de 2006 hasta noviembre de 2020.
+<br>
+Dentro de la visualización, se presenta un título principal, ejes con sus leyendas correspondientes, en el eje de las X se muestra dinámicamente 
+la tasa de morosidad al intervalo del corte respectivo. Además se muestran dos textos dinámicos con el número de acreditados 
+y el Monto de los adeudos correspondiente a los acreditados en el eje de las X que son los acreditados morosos.
+
+          
+          </p>
+         
+          <p>
+            Las burbujas mostradas representan cada una de las carteras crediticias, los colores identifican alguno de los quince tipos de cartera seleccionables en 
+            la lista desplegable,  la unidad de medida del eje de las Y es mostrada en porcentaje de la tasa de morosidad. El eje de las X representa la cantidad de
+             créditos morosos
           </p>
 
           <p>
-            Las barras mostradas representan cada una de las carteras crediticias, los colores identifican alguno de los
-            once tipos de cartera
-            seleccionables en la lista desplegable. La paleta de colores, se basa en los colores utilizados para Ciudad
-            Sustentable y Ciudad Social,
-            definidos en el Manual de Identidad Institucional del Gobierno de la Ciudad de México 2018 – 2024,
-            mismo que se publicó mediante acuerdo en la Gaceta oficial de la Ciudad de México el 21 de marzo de 2019.
+            La paleta de colores se basa en los colores utilizados para Ciudad Sustentable y Ciudad Social, definidos en el Manual de Identidad 
+            Institucional del Gobierno de la Ciudad de México 2018 – 2024, mismo que se publicó mediante acuerdo en la Gaceta oficial de la Ciudad de 
+            México el 21 de marzo de 2019. 
             <a href="https://data.consejeria.cdmx.gob.mx/portal_old/uploads/gacetas/fa597c60792082904cd6dbc497edcedb.pdf"
               target="_blank">Gaceta Oficial CDMX. (2019)</a>
           </p>
